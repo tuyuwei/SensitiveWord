@@ -24,12 +24,15 @@ $data = [
     '日本鬼子',
     '日本人',
 ];
-$str = "日本人";
 
-$wordObj = new SensitiveWord();
-$wordObj->addSensitiveWord($data);
+$trieTree = new TrieTree();
+$trieTree->addWords($data);
 
+$txt = "日本人.不是.大中华。。。";
 
-$txt = "你就是个日本人啊。。小日本。。。";
-$words = $wordObj->search($txt);
+$words = $trieTree->search($txt);
+print_r($words);
+
+$txt = $trieTree->filter($txt);
+echo $txt, "\n";
 print_r($words);
