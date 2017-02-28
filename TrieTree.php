@@ -68,14 +68,16 @@ class TrieTree
      * @param $txt
      * @return array
      */
-    public function search($txt)
+    public function search($txt, $hasReplace=false, &$replaceCodeList = array())
     {
         $wordsList = array();
         $txtLength = mb_strlen($txt);
         for ($i = 0; $i < $txtLength; $i++) {
             $wordLength = $this->checkWord($txt, $i, $txtLength);
             if ($wordLength > 0) {
-                $wordsList[] = mb_substr($txt, $i, $wordLength);//array($i, mb_substr($txt, $i, $wordLength));
+                $words = mb_substr($txt, $i, $wordLength);
+                $wordsList[] = $words;
+                $hasReplace && $replaceCodeList[] = str_repeat($this->replaceCode, mb_strlen($words));
                 $i += $wordLength - 1;
             }
         }
@@ -89,14 +91,12 @@ class TrieTree
      */
     public function filter($txt)
     {
-        $wordsList = $this->search($txt);
+        $replaceCodeList = array();
+        $wordsList = $this->search($txt, true, $replaceCodeList);
         if (empty($wordsList)) {
             return $txt;
         }
-        foreach ($wordsList as $words) {
-            $txt = str_replace($words, str_repeat($this->replaceCode, mb_strlen($words)), $txt);
-        }
-        return $txt;
+        return str_replace($wordsList, $replaceCodeList, $txt);
     }
 
     /**
@@ -123,6 +123,5 @@ class TrieTree
         return $wordLength;
     }
 }
-
 
 
