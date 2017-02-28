@@ -19,20 +19,22 @@
    ];
    
 使用：
-$data = [
-    '小日本',
-    '日本鬼子',
-    '日本人',
-];
+$disturbList = ['&', '*'];
+$data = ['日本册', '日本人', '大中华'];
 
-$trieTree = new TrieTree();
-$trieTree->addWords($data);
+$wordObj = new TrieTree($disturbList);
+$wordObj->addWords($data);
 
-$txt = "日本人.不是.大中华。。。";
+$txt = "日本加.不是.大中&华。。。";
 
-$words = $trieTree->search($txt);
+$words = $wordObj->search($txt);
 print_r($words);
 
-$txt = $trieTree->filter($txt);
+$txt = $wordObj->filter($txt);
 echo $txt, "\n";
-print_r($words);
+输出：
+Array
+(
+    [0] => 大中&华
+)
+日本加.不是.****。。。
