@@ -1,7 +1,7 @@
-# SensitiveWord
- * 敏感词过滤类
- * 采用DFA算法
- * 装载后数据结构如下：
+#敏感词过滤类
+采用DFA算法
+
+装载后数据结构如下：
  ```php
    $words = [
        '小' => [
@@ -19,7 +19,8 @@
        ],
    ];
  ```   
-#使用
+使用：
+
 ```php
     $disturbList = ['&', '*'];
     $data = ['日本册', '日本人', '大中华'];
@@ -35,7 +36,8 @@
     $txt = $wordObj->filter($txt);
     echo $txt, "\n";
 ```
-#输出
+输出：
+
 ```console
 Array
 (
