@@ -31,17 +31,23 @@ class TrieTree
      * 替换码
      * @var string
      */
-    private $replaceCode;
+    private $replaceCode = '*';
 
     /**
-     * 敏感词库
+     * 敏感词库集合
      * @var array
      */
     private $trieTreeMap = array();
+    
+    /**
+     * 干扰因子集合
+     * @var array
+     */
+    private $disturbList = array();
 
-    public function __construct($replaceCode = "*")
+    public function __construct($disturbList = array())
     {
-        $this->replaceCode = $replaceCode;
+        $this->disturbList = $disturbList;
     }
 
     /**
@@ -108,20 +114,37 @@ class TrieTree
      */
     private function checkWord($txt, $beginIndex, $length)
     {
+        $flag = false;
         $wordLength = 0;
         $trieTree = &$this->trieTreeMap;
         for ($i = $beginIndex; $i < $length; $i++) {
             $word = mb_substr($txt, $i, 1);
+            if ($this->checkDisturb($word)) {
+                $wordLength++;
+                continue;
+            }
             if (!isset($trieTree[$word])) {
                 break;
             }
+            $wordLength++;
             if ($trieTree[$word] !== false) {
                 $trieTree = &$trieTree[$word];
+            } else {
+                $flag = true;
             }
-            $wordLength++;
         }
+        $flag || $wordLength = 0;
         return $wordLength;
     }
-}
 
+    /**
+     * 干扰因子检测
+     * @param $word
+     * @return bool
+     */
+    private function checkDisturb($word)
+    {
+        return in_array($word, $this->disturbList);
+    }
+}
 
